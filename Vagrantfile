@@ -13,8 +13,6 @@ Vagrant.configure("2") do |config|
         build-essential                                    \
         clang-format                                       \
         cmake                                              \
-        doxygen                                            \
-        graphviz                                           \
         libgoogle-glog-dev                                 \
         ninja-build                                        \
         pkg-config                                         \

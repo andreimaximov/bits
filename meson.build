@@ -56,6 +56,5 @@ executable(
     link_with : lib,
 )
 
-run_target('docs', command : 'scripts/doxygen.sh')
 run_target('format', command : 'scripts/clang-format.sh')
 
