@@ -39,7 +39,7 @@ endif
 if benchmark.found()
     bench = executable(
         'cpp-bench',
-        ['bench/main.cpp', 'bench/hello_world.cpp'],
+        ['bench/main.cpp', 'bench/dispatch.cpp'],
         dependencies : [benchmark, glog, threads],
         include_directories : incdirs,
         link_with : lib,
