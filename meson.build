@@ -6,31 +6,17 @@ project(
     version : '0.0.1',
 )
 
-glog = dependency('libglog')
+boost = dependency('boost', required : true)
 gtest = dependency('gtest', required : false)
 gmock = dependency('gmock', required : false)
 benchmark = dependency('benchmark', required : false)
 threads = dependency('threads')
 
-incdirs = include_directories('include')
-
-install_subdir('include/cpp', install_dir : get_option('includedir'))
-
-lib = library(
-    'cpp-lib',
-    ['src/hello_world.cpp'],
-    dependencies : [glog],
-    include_directories : incdirs,
-    install : true,
-)
-
 if gtest.found() and gmock.found()
     test = executable(
-        'cpp-test',
-        ['test/main.cpp', 'test/hello_world.cpp'],
-        dependencies : [glog, gtest, gmock],
-        include_directories : incdirs,
-        link_with : lib,
+        'bits-test',
+        ['test/main.cpp'],
+        dependencies : [gtest, gmock],
     )
 
     test('test', test)
@@ -38,23 +24,27 @@ endif
 
 if benchmark.found()
     bench = executable(
-        'cpp-bench',
+        'bits-bench',
         ['bench/main.cpp', 'bench/dispatch.cpp'],
-        dependencies : [benchmark, glog, threads],
-        include_directories : incdirs,
-        link_with : lib,
+        dependencies : [benchmark, threads],
     )
 
     benchmark('bench', bench)
 endif
 
-executable(
-    'cpp-bin',
-    ['bin/hello_world.cpp'],
-    dependencies : [glog],
-    include_directories : incdirs,
-    link_with : lib,
-)
+bin_defs = {
+    'hyperthreads' : 'bin/hyperthreads.cpp',
+}
+
+bin_exes = []
+
+foreach name, cpp : bin_defs
+    bin_exes += executable(
+        name,
+        [cpp],
+        dependencies : [boost, threads],
+    )
+endforeach
 
 run_target('format', command : 'scripts/clang-format.sh')
 

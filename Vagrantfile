@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
         build-essential                                    \
         clang-format                                       \
         cmake                                              \
-        libgoogle-glog-dev                                 \
+        libboost-all-dev                                   \
         ninja-build                                        \
         pkg-config                                         \
         python3                                            \
