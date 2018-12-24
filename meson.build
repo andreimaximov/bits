@@ -12,11 +12,22 @@ gmock = dependency('gmock', required : false)
 benchmark = dependency('benchmark', required : false)
 threads = dependency('threads')
 
+incdirs = include_directories('include')
+
+lib = library(
+     'bits',
+     ['src/statics.cpp'],
+     dependencies : [boost, threads],
+     include_directories : incdirs,
+)
+
 if gtest.found() and gmock.found()
     test = executable(
         'bits-test',
         ['test/main.cpp'],
         dependencies : [gtest, gmock],
+        include_directories : incdirs,
+        link_with : lib,
     )
 
     test('test', test)
@@ -25,8 +36,10 @@ endif
 if benchmark.found()
     bench = executable(
         'bits-bench',
-        ['bench/main.cpp', 'bench/dispatch.cpp'],
+        ['bench/main.cpp', 'bench/dispatch.cpp', 'bench/statics.cpp'],
         dependencies : [benchmark, threads],
+        include_directories : incdirs,
+        link_with : lib,
     )
 
     benchmark('bench', bench)

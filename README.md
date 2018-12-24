@@ -18,7 +18,6 @@ meson build && cd build && ninja
 
 Some special targets are provided:
 
-- **install:** Install the library and headers on your system
 - **test:** Runs unit tests, don't forget to `meson configure -Db_sanitize=address`
 - **benchmark:** Runs benchmarks, don't forget to `meson configure -Dbuildtype=release`
 - **format:** Runs `clang-format` on the source
