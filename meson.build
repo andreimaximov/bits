@@ -1,7 +1,7 @@
 project(
     'cpp',
     'cpp',
-    default_options : ['cpp_std=c++11'],
+    default_options : ['cpp_std=c++14'],
     license : 'MIT',
     version : '0.0.1',
 )

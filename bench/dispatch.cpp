@@ -20,7 +20,7 @@ struct Derived : Base {
   }
 };
 
-constexpr auto N = 1000000;
+constexpr auto N = 1'000'000;
 
 /**
  * 2018-12-23 12:03:04

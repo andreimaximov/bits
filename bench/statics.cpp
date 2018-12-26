@@ -4,7 +4,7 @@
 
 namespace bits {
 
-constexpr auto N = 1024 * 1024 * 1024;
+constexpr auto N = 1'000'000'000;
 
 static void bench_statics_shared(benchmark::State& state) {
   for (auto _ : state) {
@@ -40,8 +40,8 @@ static void bench_statics_thread_local(benchmark::State& state) {
  * ------------------------------------------------------------------
  * Benchmark                           Time           CPU Iterations
  * ------------------------------------------------------------------
- * bench_statics_shared             1063 ms       1063 ms          1
- * bench_statics_thread_local       1066 ms       1066 ms          1
+ * bench_statics_shared             1255 ms       1255 ms          1
+ * bench_statics_thread_local       1255 ms       1255 ms          1
  *
  * 2. Shared library via meson configure -Ddefault_library=shared
  *
@@ -58,8 +58,8 @@ static void bench_statics_thread_local(benchmark::State& state) {
  * ------------------------------------------------------------------
  * Benchmark                           Time           CPU Iterations
  * ------------------------------------------------------------------
- * bench_statics_shared             1602 ms       1602 ms          1
- * bench_statics_thread_local       3469 ms       3469 ms          1
+ * bench_statics_shared             1505 ms       1505 ms          1
+ * bench_statics_thread_local       3261 ms       3261 ms          1
  *
  * As we can see shared library TLS suffers from a 2x (approx 1.5ns) performance
  * penalty. This is due to a ~3x increase instructions stemming from

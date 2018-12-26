@@ -5,7 +5,7 @@
 
 namespace bits {
 
-constexpr auto N = 1000000;
+constexpr auto N = 1'000'000;
 
 std::atomic<std::uint64_t> x;
 

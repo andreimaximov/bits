@@ -12,7 +12,7 @@
 
 #include <boost/optional.hpp>
 
-constexpr std::size_t kBufLen = 1024 * 1024;
+constexpr std::size_t kBufLen = 1'000'000;
 
 struct Sibling {
   std::uint64_t core;
