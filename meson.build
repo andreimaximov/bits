@@ -36,7 +36,12 @@ endif
 if benchmark.found()
     bench = executable(
         'bits-bench',
-        ['bench/main.cpp', 'bench/dispatch.cpp', 'bench/statics.cpp'],
+        [
+            'bench/main.cpp',
+            'bench/atomics.cpp',
+            'bench/dispatch.cpp',
+            'bench/statics.cpp',
+        ],
         dependencies : [benchmark, threads],
         include_directories : incdirs,
         link_with : lib,
