@@ -6,7 +6,7 @@ project(
     version : '0.0.1',
 )
 
-boost = dependency('boost', required : true)
+boost = dependency('boost', required : true, modules : ['system', 'thread'])
 gtest = dependency('gtest', required : false)
 gmock = dependency('gmock', required : false)
 benchmark = dependency('benchmark', required : false)
@@ -24,8 +24,8 @@ lib = library(
 if gtest.found() and gmock.found()
     test = executable(
         'bits-test',
-        ['test/main.cpp'],
-        dependencies : [gtest, gmock],
+        ['test/main.cpp', 'test/rcu.cpp'],
+        dependencies : [boost, gtest, gmock, threads],
         include_directories : incdirs,
         link_with : lib,
     )
@@ -40,9 +40,10 @@ if benchmark.found()
             'bench/main.cpp',
             'bench/atomics.cpp',
             'bench/dispatch.cpp',
+            'bench/rcu.cpp',
             'bench/statics.cpp',
         ],
-        dependencies : [benchmark, threads],
+        dependencies : [boost, benchmark, threads],
         include_directories : incdirs,
         link_with : lib,
     )
