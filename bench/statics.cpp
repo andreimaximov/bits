@@ -6,13 +6,13 @@ namespace bits {
 
 constexpr auto N = 1'000'000'000;
 
-static void bench_statics_shared(benchmark::State& state) {
+static void benchStaticsShared(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++) benchmark::DoNotOptimize(Statics::get());
   }
 }
 
-static void bench_statics_thread_local(benchmark::State& state) {
+static void benchStaticsThreadLocal(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++) benchmark::DoNotOptimize(Statics::getTL());
   }
@@ -35,13 +35,11 @@ static void bench_statics_thread_local(benchmark::State& state) {
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
  * ------------------------------------------------------------------
  * Benchmark                           Time           CPU Iterations
  * ------------------------------------------------------------------
- * bench_statics_shared             1255 ms       1255 ms          1
- * bench_statics_thread_local       1255 ms       1255 ms          1
+ * benchStaticsShared                987 ms        987 ms          1
+ * benchStaticsThreadLocal          1232 ms       1232 ms          1
  *
  * 2. Shared library via meson configure -Ddefault_library=shared
  *
@@ -53,21 +51,19 @@ static void bench_statics_thread_local(benchmark::State& state) {
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
  * ------------------------------------------------------------------
  * Benchmark                           Time           CPU Iterations
  * ------------------------------------------------------------------
- * bench_statics_shared             1505 ms       1505 ms          1
- * bench_statics_thread_local       3261 ms       3261 ms          1
+ * benchStaticsShared               1499 ms       1499 ms          1
+ * benchStaticsThreadLocal          2978 ms       2978 ms          1
  *
  * As we can see shared library TLS suffers from a 2x (approx 1.5ns) performance
- * penalty. This is due to a ~3x increase instructions stemming from
+ * penalty. This is due to an increase instructions stemming from
  * __tls_get_addr on Linux. More info here:
  * http://david-grs.github.io/tls_performance_overhead_cost_linux/
  *
  * Surprisingly, performance of normal statics also suffers when using shared
- * libraries. This is due to an approx. 75% increase in instructions due to PLT
+ * libraries. This is due to an increase in instructions due to PLT
  * (Procedure Linkage Table) lookups. More info here:
  * https://kristiannielsen.livejournal.com/14038.html
  *
@@ -75,7 +71,7 @@ static void bench_statics_thread_local(benchmark::State& state) {
  * libraries. However, TLS with static libraries cannot seem to match non-TLS. I
  * haven't figured out why yet because macOs doesn't support perf :(
  */
-BENCHMARK(bench_statics_shared)->Unit(benchmark::kMillisecond);
-BENCHMARK(bench_statics_thread_local)->Unit(benchmark::kMillisecond);
+BENCHMARK(benchStaticsShared)->Unit(benchmark::kMillisecond);
+BENCHMARK(benchStaticsThreadLocal)->Unit(benchmark::kMillisecond);
 
 }  // namespace bits

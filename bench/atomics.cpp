@@ -9,8 +9,9 @@ constexpr auto N = 1'000'000;
 
 std::atomic<std::uint64_t> x;
 
+// clang-format off
 /**
- * 2018-12-25 17:19:06
+ * 2019-01-05 00:23:03
  * Running ./bits-bench
  * Run on (6 X 4100 MHz CPU s)
  * CPU Caches:
@@ -18,32 +19,31 @@ std::atomic<std::uint64_t> x;
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
  * --------------------------------------------------------------------
  * Benchmark                             Time           CPU Iterations
  * --------------------------------------------------------------------
- * bench_atomics_load/threads:6          0 ms          2
+ * benchAtomicsLoad/threads:6            0 ms          0 ms       2724
  *
- * Performance counter stats for './bits-bench
- * --benchmark_filter=bench_atomics_load':
+ *  Performance counter stats for './bits-bench --benchmark_filter=benchAtomicsLoad':
  *
- * 11,324,672,900      instructions
- *        746,287      cache-references
- *        148,206      L1-dcache-load-misses
- *          5,845      LLC-load-misses
+ *     10,179,405,073      instructions
+ *            683,342      cache-references
+ *            161,211      L1-dcache-load-misses
+ *              5,921      LLC-load-misses
  *
- *    0.173864595 seconds time elapsed
+ *        0.166809721 seconds time elapsed
  */
-static void bench_atomics_load(benchmark::State& state) {
+// clang-format on
+static void benchAtomicsLoad(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++)
       benchmark::DoNotOptimize(x.load(std::memory_order::memory_order_relaxed));
   }
 }
 
+// clang-format off
 /**
- * 2018-12-25 17:24:14
+ * 2019-01-05 00:23:15
  * Running ./bits-bench
  * Run on (6 X 4100 MHz CPU s)
  * CPU Caches:
@@ -51,24 +51,22 @@ static void bench_atomics_load(benchmark::State& state) {
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
  * ------------------------------------------------------------------------
  * Benchmark                                 Time           CPU Iterations
  * ------------------------------------------------------------------------
- * bench_atomics_fetch_or/threads:6         28 ms        168 ms          6
+ * benchAtomicsFetchOr/threads:6            26 ms        156 ms          6
  *
- * Performance counter stats for './bits-bench
- * --benchmark_filter=bench_atomics_fetch_or':
+ *  Performance counter stats for './bits-bench --benchmark_filter=benchAtomicsFetchOr':
  *
- * 108,991,046      instructions
- *  33,424,858      cache-references
- *   6,084,362      L1-dcache-load-misses
- *       7,715      LLC-load-misses
+ *         44,226,107      instructions
+ *         32,043,012      cache-references
+ *          5,616,075      L1-dcache-load-misses
+ *              6,005      LLC-load-misses
  *
- * 0.192767959 seconds time elapsed
+ *        0.180980093 seconds time elapsed
  */
-static void bench_atomics_fetch_or(benchmark::State& state) {
+// clang-format on
+static void benchAtomicsFetchOr(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++)
       benchmark::DoNotOptimize(
@@ -82,9 +80,7 @@ static void bench_atomics_fetch_or(benchmark::State& state) {
  * synchronization. We can observe a monumentally higher L1 cache miss rate when
  * comparing load vs. fetch_or.
  */
-BENCHMARK(bench_atomics_load)->ThreadPerCpu()->Unit(benchmark::kMillisecond);
-BENCHMARK(bench_atomics_fetch_or)
-    ->ThreadPerCpu()
-    ->Unit(benchmark::kMillisecond);
+BENCHMARK(benchAtomicsLoad)->ThreadPerCpu()->Unit(benchmark::kMillisecond);
+BENCHMARK(benchAtomicsFetchOr)->ThreadPerCpu()->Unit(benchmark::kMillisecond);
 
 }  // namespace bits

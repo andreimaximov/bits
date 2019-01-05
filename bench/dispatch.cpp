@@ -22,37 +22,36 @@ struct Derived : Base {
 
 constexpr auto N = 1'000'000;
 
+// clang-format off
 /**
- * 2018-12-23 12:03:04
- * Running ./cpp-bench
+ * 2019-01-05 00:28:48
+ * Running ./bits-bench
  * Run on (6 X 4100 MHz CPU s)
  * CPU Caches:
  *   L1 Data 32K (x6)
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
  * --------------------------------------------------------
  * Benchmark                 Time           CPU Iterations
  * --------------------------------------------------------
- * bench_dispatch_1    1279767 ns    1279753 ns 541
+ * benchDispatch1      1294498 ns    1294460 ns        539
  *
- * Performance counter stats for './cpp-bench
- * --benchmark_filter=bench_dispatch_1':
+ *  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch1':
  *
- *      1012.262462      task-clock (msec)         #    0.982 CPUs utilized
- *                2      context-switches          #    0.002 K/sec
- *                0      cpu-migrations            #    0.000 K/sec
- *            2,122      page-faults               #    0.002 M/sec
- *    4,080,479,093      cycles                    #    4.031 GHz
- *    7,185,732,298      instructions              #    1.76  insn per cycle
- *    1,632,414,381      branches                  # 1612.639 M/sec
- *           55,946      branch-misses             #    0.00% of all branches
+ *        1037.707062      task-clock (msec)         #    0.983 CPUs utilized
+ *                  3      context-switches          #    0.003 K/sec
+ *                  0      cpu-migrations            #    0.000 K/sec
+ *              2,107      page-faults               #    0.002 M/sec
+ *      4,154,881,545      cycles                    #    4.004 GHz
+ *      7,164,946,273      instructions              #    1.72  insn per cycle
+ *      1,627,626,972      branches                  # 1568.484 M/sec
+ *             58,463      branch-misses             #    0.00% of all branches
  *
- *     1.030974706 seconds time elapsed
+ *        1.055503026 seconds time elapsed
  */
-static void bench_dispatch_1(benchmark::State& state) {
+// clang-format on
+static void benchDispatch1(benchmark::State& state) {
   for (auto _ : state) {
     // Simple static dispatch...
     state.PauseTiming();
@@ -67,37 +66,36 @@ static void bench_dispatch_1(benchmark::State& state) {
   }
 }
 
+// clang-format off
 /**
- * 2018-12-23 12:00:25
- * Running ./cpp-bench
+ * 2019-01-05 00:28:52
+ * Running ./bits-bench
  * Run on (6 X 4100 MHz CPU s)
  * CPU Caches:
  *   L1 Data 32K (x6)
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * ***WARNING*** CPU scaling is enabled, the benchmark real time measurements
- * may be noisy and will incur extra overhead.
- * -------------------------------------------------------
+ * --------------------------------------------------------
  * Benchmark                 Time           CPU Iterations
  * --------------------------------------------------------
- * bench_dispatch_2    1269583 ns    1269576 ns 550`
+ * benchDispatch2      1522048 ns    1521999 ns        459
  *
- * Performance counter stats for './cpp-bench
- * --benchmark_filter=bench_dispatch_2':
+ *  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch2':
  *
- *     1022.212799      task-clock (msec)         #    0.982 CPUs utilized
- *                2      context-switches          #    0.002 K/sec
- *                0      cpu-migrations            #    0.000 K/sec
- *            2,120      page-faults               #    0.002 M/sec
- *    4,119,111,087      cycles                    #    4.030 GHz
- *    7,284,703,462      instructions              #    1.77  insn per cycle
- *    2,315,914,268      branches                  # 2265.589 M/sec
- *           56,188      branch-misses             #    0.00% of all branches
+ *        1042.577152      task-clock (msec)         #    0.979 CPUs utilized
+ *                  7      context-switches          #    0.007 K/sec
+ *                  0      cpu-migrations            #    0.000 K/sec
+ *              2,107      page-faults               #    0.002 M/sec
+ *      4,195,159,860      cycles                    #    4.024 GHz
+ *      6,284,771,944      instructions              #    1.50  insn per cycle
+ *      1,997,591,259      branches                  # 1916.013 M/sec
+ *             57,726      branch-misses             #    0.00% of all branches
  *
- *      1.040700105 seconds time elapsed
+ *        1.064677845 seconds time elapsed
  */
-static void bench_dispatch_2(benchmark::State& state) {
+// clang-format on
+static void benchDispatch2(benchmark::State& state) {
   for (auto _ : state) {
     // Virtual dispatch w/just a single derived class.
     state.PauseTiming();
@@ -112,37 +110,36 @@ static void bench_dispatch_2(benchmark::State& state) {
   }
 }
 
+// clang-format off
 /**
- * 2018-12-23 11:51:00
- * Running ./cpp-bench
+ * 2019-01-05 00:28:57
+ * Running ./bits-bench
  * Run on (6 X 4100 MHz CPU s)
  * CPU Caches:
  *   L1 Data 32K (x6)
  *   L1 Instruction 32K (x6)
  *   L2 Unified 256K (x6)
  *   L3 Unified 9216K (x1)
- * **WARNING*** CPU scaling is enabled, the benchmark real time
- * measurements may be noisy and will incur extra overhead.
  * --------------------------------------------------------
  * Benchmark                 Time           CPU Iterations
  * --------------------------------------------------------
- * bench_dispatch_3    4931754 ns    4931710 ns 142
+ * benchDispatch3      4977155 ns    4977128 ns        140
  *
- * Performance counter stats for './cpp-bench
- * --benchmark_filter=bench_dispatch_3':
+ *  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch3':
  *
- *       3829.207819      task-clock (msec)         #    0.995 CPUs utilized
- *                 4      context-switches          #    0.001 K/sec
- *                 0      cpu-migrations            #    0.000 K/sec
- *             2,119      page-faults               #    0.553 K/sec
- *    15,414,057,471      cycles                    #    4.025 GHz
- *    17,711,496,052      instructions              #    1.15  insn per cycle
- *     5,560,921,334      branches                  # 1452.238 M/sec
- *       262,796,602      branch-misses             #    4.73% of all branches
+ *        2297.253921      task-clock (msec)         #    0.992 CPUs utilized
+ *                  5      context-switches          #    0.002 K/sec
+ *                  0      cpu-migrations            #    0.000 K/sec
+ *              2,103      page-faults               #    0.915 K/sec
+ *      9,206,766,473      cycles                    #    4.008 GHz
+ *     10,576,670,807      instructions              #    1.15  insn per cycle
+ *      3,319,967,111      branches                  # 1445.189 M/sec
+ *        157,162,503      branch-misses             #    4.73% of all branches
  *
- *       3.848179749 seconds time elapsed
+ *        2.315940517 seconds time elapsed
  */
-static void bench_dispatch_3(benchmark::State& state) {
+// clang-format on
+static void benchDispatch3(benchmark::State& state) {
   for (auto _ : state) {
     // Virtual dispatch w/two classes in a random order.
     state.PauseTiming();
@@ -174,8 +171,8 @@ static void bench_dispatch_3(benchmark::State& state) {
  * https://eli.thegreenplace.net/2013/12/05/the-cost-of-dynamic-virtual-calls-vs-static-crtp-dispatch-in-c
  * https://ww2.ii.uj.edu.pl/~kapela/pn/cpp_vtable.html
  */
-BENCHMARK(bench_dispatch_1);
-BENCHMARK(bench_dispatch_2);
-BENCHMARK(bench_dispatch_3);
+BENCHMARK(benchDispatch1);
+BENCHMARK(benchDispatch2);
+BENCHMARK(benchDispatch3);
 
 }  // namespace bits
