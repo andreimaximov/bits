@@ -15,18 +15,14 @@ class RcuTest : public ::testing::Test {
 
   template <typename F>
   void RunInThread(F&& f) {
-    done = false;
-    thread = std::thread{[this, f{std::move(f)}] {
-      f();
-      done = true;
-    }};
+    thread = std::thread{std::forward<F>(f)};
   }
 
   static void SleepMs(std::uint64_t ms) {
     std::this_thread::sleep_for(std::chrono::milliseconds{ms});
   }
 
-  bool done = false;
+  std::atomic<bool> done{false};
   std::thread thread;
 };
 
