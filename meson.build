@@ -16,7 +16,10 @@ incdirs = include_directories('include')
 
 lib = library(
      'bits',
-     ['src/statics.cpp'],
+     [
+        'src/cacheline.cpp',
+        'src/statics.cpp',
+     ],
      dependencies : [boost, threads],
      include_directories : incdirs,
 )
@@ -24,7 +27,11 @@ lib = library(
 if gtest.found() and gmock.found()
     test = executable(
         'bits-test',
-        ['test/main.cpp', 'test/rcu.cpp'],
+        [
+            'test/main.cpp',
+            'test/cacheline.cpp',
+            'test/rcu.cpp',
+        ],
         dependencies : [boost, gtest, gmock, threads],
         include_directories : incdirs,
         link_with : lib,
@@ -52,6 +59,7 @@ if benchmark.found()
 endif
 
 bin_defs = {
+    'cacheline'    : 'bin/cacheline.cpp',
     'hyperthreads' : 'bin/hyperthreads.cpp',
 }
 
@@ -62,6 +70,8 @@ foreach name, cpp : bin_defs
         name,
         [cpp],
         dependencies : [boost, threads],
+        include_directories : incdirs,
+        link_with : lib,
     )
 endforeach
 
