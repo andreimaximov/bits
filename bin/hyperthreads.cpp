@@ -83,13 +83,11 @@ boost::optional<Sibling> getSiblingCore(std::uint64_t core) {
   return boost::none;
 }
 
-/**
- * This program can detect virtual cores which are "siblings" aka reside on the
- * same physical core and cooperate via hyperthreading. This is done by running
- * a CPU heavy workload on all pairs of cores and detecting the slowest pairs.
- *
- * https://eli.thegreenplace.net/2016/c11-threads-affinity-and-hyperthreading/
- */
+// This program can detect virtual cores which are "siblings" aka reside on the
+// same physical core and cooperate via hyperthreading. This is done by running
+// a CPU heavy workload on all pairs of cores and detecting the slowest pairs.
+//
+// https://eli.thegreenplace.net/2016/c11-threads-affinity-and-hyperthreading/
 int main(int argc, char* argv[]) {
   auto buf = createWorkload();
   auto t = timeUs([&buf]() { runWorkload(buf.data()); });

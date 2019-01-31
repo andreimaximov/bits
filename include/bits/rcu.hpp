@@ -13,19 +13,17 @@ namespace bits {
 
 namespace detail {
 
-/**
- * A sharded reference counter optimized for 64 byte cache lines on x86-64. This
- * offers *much* better (linear!) throughput scaling for increment/decrement
- * callers (RCU readers) as the number of threads increases at the cost of (1)
- * much higher memory usage and (2) slower load(...) than a single
- * std::atomic<...>. On a 4-core processor this will use
- * 2kb of memory, much more than 8 bytes for a single std::atomic<...>. Based on
- * "A Catalog of Read Indicators":
- * http://concurrencyfreaks.blogspot.com/2014/11/a-catalog-of-read-indicators.html
- *
- * TODO(amaximov): Figure out the cache line size programatically, perhaps by
- * probing for false sharing boundaries.
- */
+// A sharded reference counter optimized for 64 byte cache lines on x86-64. This
+// offers *much* better (linear!) throughput scaling for increment/decrement
+// callers (RCU readers) as the number of threads increases at the cost of (1)
+// much higher memory usage and (2) slower load(...) than a single
+// std::atomic<...>. On a 4-core processor this will use
+// 2kb of memory, much more than 8 bytes for a single std::atomic<...>. Based on
+// "A Catalog of Read Indicators":
+// http://concurrencyfreaks.blogspot.com/2014/11/a-catalog-of-read-indicators.html
+//
+// TODO(amaximov): Figure out the cache line size programatically, perhaps by
+// probing for false sharing boundaries.
 class RcuRefCounter {
  public:
   RcuRefCounter() : counters_(numOfShards() * kCacheLinePad) {}
@@ -153,52 +151,50 @@ class RcuDomain {
 
 }  // namespace detail
 
-/**
- * RCU originates from the Linux kernel and is useful for providing a lock-free,
- * wait-free, memory safe, and low latency read path for objects shared across
- * threads. This is a userspace implementation of an RCU API similar to one in
- * the Linux kernel:
- *
- * https://www.kernel.org/doc/Documentation/RCU/whatisRCU.txt
- *
- * The implementation is based on Grace Sharing Userspace-RCU:
- * https://github.com/pramalhe/ConcurrencyFreaks/blob/master/papers/gracesharingurcu-2016.pdf
- *
- * RcuSnapshot costs approx. 12 ns (both to create and destroy) which is approx.
- * 5x faster than boost::shared_lock<boost::shared_mutex>. Throughput scales
- * linearly as the number of reader threads increases. This comes at the expense
- * of RcuSnapshot<>::sync() being slower than
- * boost::unique_lock<boost::shared_mutex> when there is > 1 writer thread
- * performing updates in busy loop. Performance of RcuSnapshot<>::sync() is
- * comparable to boost::unique_lock<boost::shared_mutex> when there is just one
- * writer. The optimal usecase for RCU is a read-frequent/write-infrequent
- * workload.
- *
- * The API is similar to folly RCU:
- * https://github.com/facebook/folly/blob/master/folly/synchronization/Rcu.h
- *
- * std::atomic<Config*> config{new Config{}};
- *
- * void doStuffWithConfig(const Config& config) { ... }
- *
- * void reader() {
- *   RcuSnapshot<> snap;
- *   doStuffWithConfig(*snap.get(config));
- * }
- *
- * void writer() {
- *   while (true) {
- *     std::this_thread::sleep_for(std::chrono::seconds{60});
- *     Config* newConfig = loadConfig();
- *     Config* oldConfig = config.exchange(newConfig);
- *     RcuSnapshot<>::sync();
- *     delete oldConfig;
- *   }
- * }
- *
- * An optional Tag can be provided to segregate synchronization domains of
- * unrelated objects.
- */
+// RCU originates from the Linux kernel and is useful for providing a lock-free,
+// wait-free, memory safe, and low latency read path for objects shared across
+// threads. This is a userspace implementation of an RCU API similar to one in
+// the Linux kernel:
+//
+// https://www.kernel.org/doc/Documentation/RCU/whatisRCU.txt
+//
+// The implementation is based on Grace Sharing Userspace-RCU:
+// https://github.com/pramalhe/ConcurrencyFreaks/blob/master/papers/gracesharingurcu-2016.pdf
+//
+// RcuSnapshot costs approx. 12 ns (both to create and destroy) which is approx.
+// 5x faster than boost::shared_lock<boost::shared_mutex>. Throughput scales
+// linearly as the number of reader threads increases. This comes at the expense
+// of RcuSnapshot<>::sync() being slower than
+// boost::unique_lock<boost::shared_mutex> when there is > 1 writer thread
+// performing updates in busy loop. Performance of RcuSnapshot<>::sync() is
+// comparable to boost::unique_lock<boost::shared_mutex> when there is just one
+// writer. The optimal usecase for RCU is a read-frequent/write-infrequent
+// workload.
+//
+// The API is similar to folly RCU:
+// https://github.com/facebook/folly/blob/master/folly/synchronization/Rcu.h
+//
+// std::atomic<Config*> config{new Config{}};
+//
+// void doStuffWithConfig(const Config& config) { ... }
+//
+// void reader() {
+//   RcuSnapshot<> snap;
+//   doStuffWithConfig(*snap.get(config));
+// }
+//
+// void writer() {
+//   while (true) {
+//     std::this_thread::sleep_for(std::chrono::seconds{60});
+//     Config* newConfig = loadConfig();
+//     Config* oldConfig = config.exchange(newConfig);
+//     RcuSnapshot<>::sync();
+//     delete oldConfig;
+//   }
+// }
+//
+// An optional Tag can be provided to segregate synchronization domains of
+// unrelated objects.
 template <typename Tag = void>
 class RcuSnapshot {
  public:
@@ -223,11 +219,9 @@ class RcuSnapshot {
     return p.load();
   }
 
-  /**
-   * Synchronizes snapshots across threads by blocking until all happens-before
-   * snapshots have been destroyed. All happens-after snapshots are guaranteed
-   * to see writes made before sync.
-   */
+  // Synchronizes snapshots across threads by blocking until all happens-before
+  // snapshots have been destroyed. All happens-after snapshots are guaranteed
+  // to see writes made before sync.
   static void sync() { detail::RcuDomain<Tag>::get().sync(); }
 
  private:
