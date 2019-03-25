@@ -12,6 +12,8 @@
 
 #include <boost/optional.hpp>
 
+namespace {
+
 constexpr std::size_t kBufLen = 1'000'000;
 
 struct Sibling {
@@ -82,6 +84,8 @@ boost::optional<Sibling> getSiblingCore(std::uint64_t core) {
   }
   return boost::none;
 }
+
+}  // namespace
 
 // This program can detect virtual cores which are "siblings" aka reside on the
 // same physical core and cooperate via hyperthreading. This is done by running

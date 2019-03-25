@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace bits {
+namespace {
 
 // MUST be a power of two to perform bitwise AND based modulo.
 constexpr std::size_t kArrayLen = 1024 * 1024;
@@ -14,7 +15,7 @@ constexpr std::size_t kNumLoads = 1024 * 1024;
 constexpr std::size_t kMaxCacheLine = 1024;
 constexpr double kThresh = 1.25;
 
-static std::vector<std::uint8_t> createRandomVec(std::size_t step) {
+std::vector<std::uint8_t> createRandomVec(std::size_t step) {
   std::random_device r;
   std::default_random_engine eng{r()};
   std::uniform_int_distribution<std::uint8_t> dist{0, 255};
@@ -33,7 +34,7 @@ static std::vector<std::uint8_t> createRandomVec(std::size_t step) {
   return xs;
 }
 
-static std::chrono::high_resolution_clock::duration benchWithStepSize(
+std::chrono::high_resolution_clock::duration benchWithStepSize(
     std::size_t step, volatile std::size_t* doNotOptimize) {
   auto xs = createRandomVec(step);
   std::size_t p = 0;
@@ -47,6 +48,8 @@ static std::chrono::high_resolution_clock::duration benchWithStepSize(
   *doNotOptimize = p;
   return loopTime;
 }
+
+}  // namespace
 
 boost::optional<std::size_t> getCacheLineSize() {
   static auto kCacheLineSize = []() -> boost::optional<std::size_t> {

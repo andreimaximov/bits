@@ -4,6 +4,7 @@
 #include <benchmark/benchmark.h>
 
 namespace bits {
+namespace {
 
 constexpr auto N = 1'000'000;
 
@@ -32,7 +33,7 @@ std::atomic<std::uint64_t> x;
 //
 //        0.166809721 seconds time elapsed
 // clang-format on
-static void benchAtomicsLoad(benchmark::State& state) {
+void benchAtomicsLoad(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++)
       benchmark::DoNotOptimize(x.load(std::memory_order::memory_order_relaxed));
@@ -62,7 +63,7 @@ static void benchAtomicsLoad(benchmark::State& state) {
 //
 //        0.180980093 seconds time elapsed
 // clang-format on
-static void benchAtomicsFetchOr(benchmark::State& state) {
+void benchAtomicsFetchOr(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++)
       benchmark::DoNotOptimize(
@@ -77,4 +78,5 @@ static void benchAtomicsFetchOr(benchmark::State& state) {
 BENCHMARK(benchAtomicsLoad)->ThreadPerCpu()->Unit(benchmark::kMillisecond);
 BENCHMARK(benchAtomicsFetchOr)->ThreadPerCpu()->Unit(benchmark::kMillisecond);
 
+}  // namespace
 }  // namespace bits

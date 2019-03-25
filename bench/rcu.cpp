@@ -6,6 +6,7 @@
 #include <bits/rcu.hpp>
 
 namespace bits {
+namespace {
 
 constexpr auto N = 100'000;
 
@@ -49,7 +50,7 @@ class RcuSnapshotSync {
 };
 
 template <typename T>
-static void benchRcuSnapshot(benchmark::State& state) {
+void benchRcuSnapshot(benchmark::State& state) {
   T strategy;
 
   for (auto _ : state) {
@@ -60,7 +61,7 @@ static void benchRcuSnapshot(benchmark::State& state) {
 }
 
 template <typename T>
-static void benchRcuSync(benchmark::State& state) {
+void benchRcuSync(benchmark::State& state) {
   T strategy;
 
   for (auto _ : state) {
@@ -71,7 +72,7 @@ static void benchRcuSync(benchmark::State& state) {
 }
 
 template <typename T>
-static void benchRcuSyncAndSnapshot(benchmark::State& state) {
+void benchRcuSyncAndSnapshot(benchmark::State& state) {
   T strategy;
 
   if (state.thread_index == 0) {
@@ -149,4 +150,5 @@ BENCHMARK_TEMPLATE(benchRcuSyncAndSnapshot, RcuSnapshotSync<char>)
     ->Unit(benchmark::kMicrosecond)
     ->ThreadRange(2, 16);
 
+}  // namespace
 }  // namespace bits

@@ -1,9 +1,12 @@
 #include <bits/statics.hpp>
 
 namespace bits {
+namespace {
 
-static char a = 'a';
-thread_local static char b = 'b';
+char a = 'a';
+thread_local char b = 'b';
+
+}  // namespace
 
 void* Statics::get() {
   return &a;

@@ -5,6 +5,7 @@
 #include <benchmark/benchmark.h>
 
 namespace bits {
+namespace {
 
 struct Base {
   virtual ~Base() {}
@@ -49,7 +50,7 @@ constexpr auto N = 1'000'000;
 //
 //        1.055503026 seconds time elapsed
 // clang-format on
-static void benchDispatch1(benchmark::State& state) {
+void benchDispatch1(benchmark::State& state) {
   for (auto _ : state) {
     // Simple static dispatch...
     state.PauseTiming();
@@ -91,7 +92,7 @@ static void benchDispatch1(benchmark::State& state) {
 //
 //        1.064677845 seconds time elapsed
 // clang-format on
-static void benchDispatch2(benchmark::State& state) {
+void benchDispatch2(benchmark::State& state) {
   for (auto _ : state) {
     // Virtual dispatch w/just a single derived class.
     state.PauseTiming();
@@ -133,7 +134,7 @@ static void benchDispatch2(benchmark::State& state) {
 //
 //        2.315940517 seconds time elapsed
 // clang-format on
-static void benchDispatch3(benchmark::State& state) {
+void benchDispatch3(benchmark::State& state) {
   for (auto _ : state) {
     // Virtual dispatch w/two classes in a random order.
     state.PauseTiming();
@@ -167,4 +168,5 @@ BENCHMARK(benchDispatch1);
 BENCHMARK(benchDispatch2);
 BENCHMARK(benchDispatch3);
 
+}  // namespace
 }  // namespace bits

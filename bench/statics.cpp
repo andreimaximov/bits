@@ -3,16 +3,17 @@
 #include <benchmark/benchmark.h>
 
 namespace bits {
+namespace {
 
 constexpr auto N = 1'000'000'000;
 
-static void benchStaticsShared(benchmark::State& state) {
+void benchStaticsShared(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++) benchmark::DoNotOptimize(Statics::get());
   }
 }
 
-static void benchStaticsThreadLocal(benchmark::State& state) {
+void benchStaticsThreadLocal(benchmark::State& state) {
   for (auto _ : state) {
     for (auto k = 0; k < N; k++) benchmark::DoNotOptimize(Statics::getTL());
   }
@@ -72,4 +73,5 @@ static void benchStaticsThreadLocal(benchmark::State& state) {
 BENCHMARK(benchStaticsShared)->Unit(benchmark::kMillisecond);
 BENCHMARK(benchStaticsThreadLocal)->Unit(benchmark::kMillisecond);
 
+}  // namespace
 }  // namespace bits
