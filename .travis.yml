@@ -1,0 +1,18 @@
+language: cpp
+os:
+  - linux
+dist:
+  - xenial
+compiler:
+  - gcc
+  - clang
+install:
+  - cd ${TRAVIS_BUILD_DIR}
+  - ./scripts/install-deps.sh
+script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - meson build
+  - cd build
+  - meson configure -Dbuildtype=release -Db_sanitize=address,undefined -Db_lundef=false # https://github.com/mesonbuild/meson/issues/3853
+  - ninja
+  - ninja test

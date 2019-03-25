@@ -2,10 +2,12 @@
 
 This project contains a collection of standalone programming "bits". Most of these were done to learn something. [Meson](https://mesonbuild.com/) is used for C++ builds.
 
+[![Build Status](https://travis-ci.com/andreimaximov/bits.svg?branch=master)](https://travis-ci.com/andreimaximov/bits)
+
 ## Dependencies
 
+- [boost](https://www.boost.org/)
 - [benchmark](https://github.com/google/benchmark)
-- [glog](https://github.com/google/glog)
 - [googletest](https://github.com/google/googletest)
 
 ## Building
