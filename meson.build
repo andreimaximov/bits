@@ -46,6 +46,7 @@ if benchmark.found()
         [
             'bench/main.cpp',
             'bench/atomics.cpp',
+            'bench/cacheeffects.cpp',
             'bench/dispatch.cpp',
             'bench/rcu.cpp',
             'bench/statics.cpp',
