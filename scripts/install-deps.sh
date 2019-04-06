@@ -33,11 +33,11 @@ cd /tmp &&                                                                 \
     cmake -DCMAKE_BUILD_TYPE=RELEASE .. &&                                 \
     sudo make -j $(nproc) install
 
-cd /tmp &&                                                                 \
-    wget https://github.com/google/benchmark/archive/v1.4.1.zip &&         \
-    unzip -q v1.4.1.zip &&                                                 \
-    cd benchmark-1.4.1 &&                                                  \
-    mkdir build &&                                                         \
-    cd build &&                                                            \
-    cmake -DCMAKE_BUILD_TYPE=RELEASE .. &&                                 \
+cd /tmp &&                                                         \
+    wget https://github.com/google/benchmark/archive/v1.4.1.zip && \
+    unzip -q v1.4.1.zip &&                                         \
+    cd benchmark-1.4.1 &&                                          \
+    mkdir build &&                                                 \
+    cd build &&                                                    \
+    cmake -DCMAKE_BUILD_TYPE=RELEASE .. &&                         \
     sudo make -j $(nproc) install
