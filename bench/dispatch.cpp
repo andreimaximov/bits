@@ -24,7 +24,7 @@ struct Derived : Base {
 constexpr auto N = 1'000'000;
 
 // clang-format off
-// 2019-01-05 00:28:48
+// 2019-04-06 20:24:09
 // Running ./bits-bench
 // Run on (6 X 4100 MHz CPU s)
 // CPU Caches:
@@ -32,26 +32,27 @@ constexpr auto N = 1'000'000;
 //   L1 Instruction 32K (x6)
 //   L2 Unified 256K (x6)
 //   L3 Unified 9216K (x1)
-// --------------------------------------------------------
-// Benchmark                 Time           CPU Iterations
-// --------------------------------------------------------
-// benchDispatch1      1294498 ns    1294460 ns        539
+// Load Average: 0.12, 0.24, 0.42
+// ---------------------------------------------------------
+// Benchmark               Time             CPU   Iterations
+// ---------------------------------------------------------
+// benchDispatch1       1.36 ns         1.36 ns    509000000
 //
 //  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch1':
 //
-//        1037.707062      task-clock (msec)         #    0.983 CPUs utilized
+//        1024.373886      task-clock (msec)         #    0.983 CPUs utilized
 //                  3      context-switches          #    0.003 K/sec
 //                  0      cpu-migrations            #    0.000 K/sec
-//              2,107      page-faults               #    0.002 M/sec
-//      4,154,881,545      cycles                    #    4.004 GHz
-//      7,164,946,273      instructions              #    1.72  insn per cycle
-//      1,627,626,972      branches                  # 1568.484 M/sec
-//             58,463      branch-misses             #    0.00% of all branches
+//              2,113      page-faults               #    0.002 M/sec
+//      4,172,897,410      cycles                    #    4.074 GHz
+//      3,145,824,251      instructions              #    0.75  insn per cycle
+//        941,774,012      branches                  #  919.366 M/sec
+//             61,098      branch-misses             #    0.01% of all branches
 //
-//        1.055503026 seconds time elapsed
+//        1.042483640 seconds time elapsed
 // clang-format on
 void benchDispatch1(benchmark::State& state) {
-  for (auto _ : state) {
+  while (state.KeepRunningBatch(N)) {
     // Simple static dispatch...
     state.PauseTiming();
     Derived<0> d;
@@ -66,7 +67,7 @@ void benchDispatch1(benchmark::State& state) {
 }
 
 // clang-format off
-// 2019-01-05 00:28:52
+// 2019-04-06 20:24:14
 // Running ./bits-bench
 // Run on (6 X 4100 MHz CPU s)
 // CPU Caches:
@@ -74,26 +75,27 @@ void benchDispatch1(benchmark::State& state) {
 //   L1 Instruction 32K (x6)
 //   L2 Unified 256K (x6)
 //   L3 Unified 9216K (x1)
-// --------------------------------------------------------
-// Benchmark                 Time           CPU Iterations
-// --------------------------------------------------------
-// benchDispatch2      1522048 ns    1521999 ns        459
+// Load Average: 0.19, 0.25, 0.42
+// ---------------------------------------------------------
+// Benchmark               Time             CPU   Iterations
+// ---------------------------------------------------------
+// benchDispatch2       1.50 ns         1.50 ns    461000000
 //
 //  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch2':
 //
-//        1042.577152      task-clock (msec)         #    0.979 CPUs utilized
-//                  7      context-switches          #    0.007 K/sec
-//                  0      cpu-migrations            #    0.000 K/sec
-//              2,107      page-faults               #    0.002 M/sec
-//      4,195,159,860      cycles                    #    4.024 GHz
-//      6,284,771,944      instructions              #    1.50  insn per cycle
-//      1,997,591,259      branches                  # 1916.013 M/sec
-//             57,726      branch-misses             #    0.00% of all branches
+//        1034.923312      task-clock (msec)         #    0.983 CPUs utilized
+//                  3      context-switches          #    0.003 K/sec
+//                  1      cpu-migrations            #    0.001 K/sec
+//              2,112      page-faults               #    0.002 M/sec
+//      4,217,233,192      cycles                    #    4.075 GHz
+//      6,373,851,743      instructions              #    1.51  insn per cycle
+//      2,025,782,373      branches                  # 1957.423 M/sec
+//             62,348      branch-misses             #    0.00% of all branches
 //
-//        1.064677845 seconds time elapsed
+//        1.052974741 seconds time elapsed
 // clang-format on
 void benchDispatch2(benchmark::State& state) {
-  for (auto _ : state) {
+  while (state.KeepRunningBatch(N)) {
     // Virtual dispatch w/just a single derived class.
     state.PauseTiming();
     Derived<0> d;
@@ -108,7 +110,7 @@ void benchDispatch2(benchmark::State& state) {
 }
 
 // clang-format off
-// 2019-01-05 00:28:57
+// 2019-04-06 20:24:19
 // Running ./bits-bench
 // Run on (6 X 4100 MHz CPU s)
 // CPU Caches:
@@ -116,26 +118,27 @@ void benchDispatch2(benchmark::State& state) {
 //   L1 Instruction 32K (x6)
 //   L2 Unified 256K (x6)
 //   L3 Unified 9216K (x1)
-// --------------------------------------------------------
-// Benchmark                 Time           CPU Iterations
-// --------------------------------------------------------
-// benchDispatch3      4977155 ns    4977128 ns        140
+// Load Average: 0.26, 0.26, 0.43
+// ---------------------------------------------------------
+// Benchmark               Time             CPU   Iterations
+// ---------------------------------------------------------
+// benchDispatch3       4.85 ns         4.85 ns    144000000
 //
 //  Performance counter stats for './bits-bench --benchmark_filter=benchDispatch3':
 //
-//        2297.253921      task-clock (msec)         #    0.992 CPUs utilized
-//                  5      context-switches          #    0.002 K/sec
+//        3893.905046      task-clock (msec)         #    0.995 CPUs utilized
+//                  6      context-switches          #    0.002 K/sec
 //                  0      cpu-migrations            #    0.000 K/sec
-//              2,103      page-faults               #    0.915 K/sec
-//      9,206,766,473      cycles                    #    4.008 GHz
-//     10,576,670,807      instructions              #    1.15  insn per cycle
-//      3,319,967,111      branches                  # 1445.189 M/sec
-//        157,162,503      branch-misses             #    4.73% of all branches
+//              2,112      page-faults               #    0.542 K/sec
+//     15,907,493,920      cycles                    #    4.085 GHz
+//     18,273,187,408      instructions              #    1.15  insn per cycle
+//      5,737,035,254      branches                  # 1473.337 M/sec
+//        272,614,588      branch-misses             #    4.75% of all branches
 //
-//        2.315940517 seconds time elapsed
+//        3.912407822 seconds time elapsed
 // clang-format on
 void benchDispatch3(benchmark::State& state) {
-  for (auto _ : state) {
+  while (state.KeepRunningBatch(N)) {
     // Virtual dispatch w/two classes in a random order.
     state.PauseTiming();
     std::srand(2983498);
