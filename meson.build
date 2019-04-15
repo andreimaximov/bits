@@ -31,6 +31,7 @@ if gtest.found() and gmock.found()
             'test/main.cpp',
             'test/cacheline.cpp',
             'test/rcu.cpp',
+            'test/tag_list.cpp',
         ],
         dependencies : [boost, gtest, gmock, threads],
         include_directories : incdirs,
