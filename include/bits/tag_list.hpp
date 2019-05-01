@@ -139,7 +139,7 @@ struct Partitioned {
   using rhs = typename FilteredTagList<TagList, FInv>::type;
 };
 
-template <typename TagList, template <typename> class F>
+template <typename TagList, template <typename, typename> class F>
 struct SortedTagList {
   template <typename... Tags>
   struct SortedVargs {
@@ -150,7 +150,7 @@ struct SortedTagList {
   struct SortedVargs<HeadTag, Tags...> {
     template <typename Tag>
     struct F1 {
-      static constexpr auto value = F<Tag>::value < F<HeadTag>::value;
+      static constexpr auto value = F<Tag, HeadTag>::value;
     };
 
     using lhs = typename Partitioned<::bits::TagList<Tags...>, F1>::lhs;
@@ -203,8 +203,9 @@ struct Partitioned {
   using rhs = typename detail::Partitioned<TagList, F>::rhs;
 };
 
-// Generates a sorted TagList based on comparing F<T>::value for each tag T.
-template <typename TagList, template <typename> class F>
+// Generates a sorted (from smallest to largest) TagList based on the "less
+// than" comparator F<Lhs, Rhs>::value for pairs of type Lhs and Rhs.
+template <typename TagList, template <typename, typename> class F>
 using Sorted = typename detail::SortedTagList<TagList, F>::type;
 
 }  // namespace bits

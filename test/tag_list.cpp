@@ -6,9 +6,22 @@ namespace bits {
 
 namespace {
 
-struct Tag1 {};
-struct Tag2 {};
-struct Tag3 {};
+struct Tag1 {
+  static constexpr auto key = 1;
+};
+
+struct Tag2 {
+  static constexpr auto key = 2;
+};
+
+struct Tag3 {
+  static constexpr auto key = 3;
+};
+
+template <typename Lhs, typename Rhs>
+struct LessThan {
+  static constexpr auto value = Lhs::key < Rhs::key;
+};
 
 using Tags0 = TagList<>;
 using Tags1 = TagList<Tag1>;
@@ -17,24 +30,6 @@ using Tags3 = TagList<Tag1, Tag2, Tag3>;
 
 template <typename Tag>
 using IsTag2 = std::is_same<Tag2, Tag>;
-
-template <typename Tag>
-struct Key;
-
-template <>
-struct Key<Tag1> {
-  static constexpr auto value = 1;
-};
-
-template <>
-struct Key<Tag2> {
-  static constexpr auto value = 2;
-};
-
-template <>
-struct Key<Tag3> {
-  static constexpr auto value = 3;
-};
 
 template <typename Lhs, typename Rhs>
 void assertSame() {
@@ -79,7 +74,7 @@ TEST(TagListTest, Filtered) {
   assertSame<TagList<>, Filtered<Tags0, IsTag2>>();
   assertSame<TagList<>, Filtered<Tags1, IsTag2>>();
   assertSame<TagList<Tag2>, Filtered<Tags2, IsTag2>>();
-  assertSame<TagList<Tag2>, Filtered<Tags2, IsTag2>>();
+  assertSame<TagList<Tag2>, Filtered<Tags3, IsTag2>>();
 }
 
 TEST(TagListTest, Concatenated) {
@@ -106,14 +101,14 @@ TEST(TagListTest, Partitioned) {
 }
 
 TEST(TagListTest, Sorted) {
-  assertSame<Tags0, Sorted<Tags0, Key>>();
-  assertSame<Tags1, Sorted<TagList<Tag1>, Key>>();
-  assertSame<Tags2, Sorted<TagList<Tag2, Tag1>, Key>>();
-  assertSame<Tags3, Sorted<TagList<Tag3, Tag2, Tag1>, Key>>();
-  assertSame<Tags3, Sorted<TagList<Tag2, Tag3, Tag1>, Key>>();
-  assertSame<Tags3, Sorted<TagList<Tag2, Tag1, Tag3>, Key>>();
-  assertSame<Tags3, Sorted<TagList<Tag3, Tag1, Tag2>, Key>>();
-  assertSame<Tags3, Sorted<TagList<Tag1, Tag3, Tag2>, Key>>();
+  assertSame<Tags0, Sorted<Tags0, LessThan>>();
+  assertSame<Tags1, Sorted<TagList<Tag1>, LessThan>>();
+  assertSame<Tags2, Sorted<TagList<Tag2, Tag1>, LessThan>>();
+  assertSame<Tags3, Sorted<TagList<Tag3, Tag2, Tag1>, LessThan>>();
+  assertSame<Tags3, Sorted<TagList<Tag2, Tag3, Tag1>, LessThan>>();
+  assertSame<Tags3, Sorted<TagList<Tag2, Tag1, Tag3>, LessThan>>();
+  assertSame<Tags3, Sorted<TagList<Tag3, Tag1, Tag2>, LessThan>>();
+  assertSame<Tags3, Sorted<TagList<Tag1, Tag3, Tag2>, LessThan>>();
 }
 
 }  // namespace bits
