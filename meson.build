@@ -51,6 +51,7 @@ if benchmark.found()
             'bench/dispatch.cpp',
             'bench/rcu.cpp',
             'bench/statics.cpp',
+            'bench/syscall.cpp',
         ],
         dependencies : [boost, benchmark, threads],
         include_directories : incdirs,
