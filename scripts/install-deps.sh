@@ -15,7 +15,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     valgrind                                           \
     wget
 
-sudo pip3 install meson
+sudo pip3 install meson==0.52.1
 
 cd /tmp &&                                                                         \
     wget https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip && \
