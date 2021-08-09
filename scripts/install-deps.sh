@@ -17,11 +17,11 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 sudo pip3 install meson==0.52.1
 
-cd /tmp &&                                                                         \
-    wget https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.zip && \
-    unzip -q boost_1_69_0.zip &&                                                   \
-    cd boost_1_69_0 &&                                                             \
-    ./bootstrap.sh --with-libraries=system,thread &&                               \
+cd /tmp &&                                                                                       \
+    wget https://boostorg.jfrog.io/artifactory/main/release/1.69.0/source/boost_1_69_0.tar.gz && \
+    tar -xzf boost_1_69_0.tar.gz &&                                                              \
+    cd boost_1_69_0 &&                                                                           \
+    ./bootstrap.sh --with-libraries=system,thread &&                                             \
     sudo ./b2 install -d0 -j $(nproc)
 
 cd /tmp &&                                                                 \
